@@ -261,3 +261,7 @@
         .nav-links { display: none; }
         .hero h1 { font-size: 2.5rem; }
       }
+
+      html {
+      scroll-behavior: smooth;
+      }
