@@ -71,28 +71,33 @@
         color: var(--primary);
       }
 
-      /* Hero Section */
       .hero {
-        height: 100vh;
-        background: linear-gradient(rgba(18, 18, 23, 0.7), rgba(18, 18, 23, 0.9)), url('https://i.postimg.cc/g2sJn29m/IMG-20261010-164825.jpg');
-        background-size: cover;
-        background-position: center;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        padding: 0 20px;
+         height: 100vh;
+         /* ВОТ ТУТ ВСЁ В ОДНУ СТРОКУ: градиент, затемнение и картинка */
+         background: linear-gradient(to bottom, rgba(18, 18, 23, 0) 60%, rgba(18, 18, 23, 1) 100%), 
+                linear-gradient(rgba(18, 18, 23, 0.8), rgba(18, 18, 23, 0.95)), 
+                url('img/IMG_20261113_185410.jpg') center/cover no-repeat;
+    
+         display: flex;
+         flex-direction: column;
+         justify-content: center;
+         align-items: center;
+         text-align: center;
+         padding: 0 20px;
       }
 
       .hero h1 {
         font-size: 4rem;
         margin-bottom: 1rem;
         text-transform: uppercase;
-        background: linear-gradient(to right, #fff, var(--primary));
+        background: linear-gradient(to right, 
+           #0055FF 0%,    /* Наш синий */
+           #00AA55 50%,   /* Наш зеленый (посередине) */
+           #FFD700 100%   /* Золотой/желтый (в конце) */
+        );
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        filter: drop-shadow(0 0 10px rgba(0, 210, 255, 0.5));
+        filter: drop-shadow(0 0 20px rgba(0, 170, 85, 1));
       }
 
       .hero p {
@@ -105,24 +110,7 @@
       .btn {
         padding: 15px 40px;
         border-radius: 8px;
-        text-decoration: none;
         font-weight: 700;
-        text-transform: uppercase;
-        transition: all 0.3s;
-        cursor: pointer;
-        border: none;
-        display: inline-block;
-      }
-
-      .btn-primary {
-        background: linear-gradient(45deg, var(--primary), var(--secondary));
-        color: #000000;
-        box-shadow: 0 4px 15px rgba(0, 210, 255, 0.3);
-      }
-
-      .btn-primary:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 20px rgba(0, 210, 255, 0.5);
       }
 
       /* Sections */
@@ -265,3 +253,168 @@
       html {
       scroll-behavior: smooth;
       }
+
+      /* ==========================================
+      АНИМАЦИЯ ПОЯВЛЕНИЯ
+      ========================================== */
+
+      /* Ключевые кадры (как именно двигается) */
+      @keyframes fadeInUp {
+        from {
+             opacity: 0; /* Прозрачный */
+             transform: translateY(30px); /* Сдвинут вниз на 30px */
+        }
+        to {
+             opacity: 1; /* Непрозрачный */
+             transform: translateY(0); /* Встал на место */
+        }
+      }
+
+      /* Применяем к элементам */
+      .hero h1 {
+         animation: fadeInUp 0.8s ease-out forwards;
+      }
+
+      .hero p {
+         animation: fadeInUp 0.8s ease-out 0.2s forwards; /* Задержка 0.2 сек */
+         opacity: 0; /* Изначально скрыт */
+      }
+
+      .hero .btn {
+         animation: fadeInUp 0.8s ease-out 0.4s forwards; /* Задержка 0.4 сек */
+         opacity: 0; /* Изначально скрыт */
+      }
+
+    /* ==========================================
+    БАЗОВЫЙ СТИЛЬ ДЛЯ ВСЕХ КНОПОК
+    ========================================== */
+    .btn-primary {
+        display: inline-block !important;
+        padding: 15px 40px !important;
+        border-radius: 8px !important;
+        text-decoration: none !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        cursor: pointer !important;
+        border: none !important;
+    
+        background: linear-gradient(135deg, #0055FF 0%, #2A2A2A 50%, #00AA55 100%) !important;
+        background-size: 200% 200% !important;
+        color: #FFFFFF !important;
+    
+        /* ПЛАВНЫЙ ПЕРЕХОД ПРИ НАВЕДЕНИИ */
+        transition: background-position 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease !important;
+    }
+
+    /* ==========================================
+       АНИМАЦИЯ ПУЛЬСАЦИИ (КЛЮЧЕВЫЕ КАДРЫ)
+       ========================================== */
+    @keyframes glowPulse {
+        0% {
+            box-shadow: 0 0 10px rgba(0, 170, 85, 0.3);
+        }
+        50% {
+            box-shadow: 0 0 25px rgba(0, 170, 85, 0.8);
+        }
+        100% {
+            box-shadow: 0 0 10px rgba(0, 170, 85, 0.3);
+        }
+    }
+
+       /* ==========================================
+       ПРИМЕНЕНИЕ АНИМАЦИИ
+       ========================================== */
+    /* Кнопка "Начать играть" (быстрая - 1.5 сек) */
+    #btn-start {
+        animation: glowPulse 4s infinite ease-in-out !important;
+    }
+
+    /* Кнопка "Скачать лаунчер" (медленная - 3 сек) */
+    #btn-download {
+        animation: glowPulse 4s infinite ease-in-out !important;
+    }
+
+    /* Если у кнопок нет ID, они будут пульсировать по умолчанию (2 сек) */
+    .btn-primary:not(#btn-start):not(#btn-download) {
+        animation: glowPulse 2s infinite ease-in-out !important;
+    }
+
+    /* ==========================================
+    ПРИ НАВЕДЕНИИ МЫШКИ (ПЛАВНЫЙ ПЕРЕХОД)
+    ========================================== */
+    .btn-primary:hover {
+        /* Останавливаем пульсацию, чтобы не дергалась */
+        animation-play-state: paused !important;
+    
+        /* Сдвигаем градиент (кнопка становится зеленой) */
+        background-position: 100% 100% !important;
+    
+        /* Делаем максимальное свечение */
+        box-shadow: 0 0 30px rgba(0, 170, 85, 1), 0 0 60px rgba(0, 170, 85, 0.6) !important;
+    
+        /* Чуть поднимаем */
+        transform: translateY(-3px) !important;
+      }
+
+      /* ==========================================
+   СНЕГ (ГУСТОЙ И МЯГКИЙ)
+   ========================================== */
+.snow-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    overflow: hidden;
+}
+
+.snow {
+    position: absolute;
+    top: -20px;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.6;
+    filter: blur(2px); /* Базовое размытие */
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    0% { transform: translateY(-10px) translateX(0); }
+    50% { transform: translateY(50vh) translateX(20px); }
+    100% { transform: translateY(100vh) translateX(-15px); }
+}
+
+/* Настройки для всех 30 снежинок */
+.snow:nth-child(1) { left: 2%; width: 8px; height: 8px; animation-duration: 5s; filter: blur(2px); }
+.snow:nth-child(2) { left: 5%; width: 5px; height: 5px; animation-duration: 8s; filter: blur(4px); }
+.snow:nth-child(3) { left: 8%; width: 10px; height: 10px; animation-duration: 6s; filter: blur(1px); }
+.snow:nth-child(4) { left: 11%; width: 7px; height: 7px; animation-duration: 9s; filter: blur(3px); }
+.snow:nth-child(5) { left: 14%; width: 9px; height: 9px; animation-duration: 5.5s; filter: blur(2px); }
+.snow:nth-child(6) { left: 17%; width: 6px; height: 6px; animation-duration: 10s; filter: blur(5px); }
+.snow:nth-child(7) { left: 20%; width: 11px; height: 11px; animation-duration: 7s; filter: blur(1.5px); }
+.snow:nth-child(8) { left: 23%; width: 8px; height: 8px; animation-duration: 8.5s; filter: blur(3px); }
+.snow:nth-child(9) { left: 26%; width: 12px; height: 12px; animation-duration: 6s; filter: blur(1px); }
+.snow:nth-child(10) { left: 29%; width: 5px; height: 5px; animation-duration: 9.5s; filter: blur(4px); }
+.snow:nth-child(11) { left: 32%; width: 9px; height: 9px; animation-duration: 7s; filter: blur(2px); }
+.snow:nth-child(12) { left: 35%; width: 10px; height: 10px; animation-duration: 8s; filter: blur(1px); }
+.snow:nth-child(13) { left: 38%; width: 7px; height: 7px; animation-duration: 6.5s; filter: blur(3px); }
+.snow:nth-child(14) { left: 41%; width: 8px; height: 8px; animation-duration: 9s; filter: blur(2px); }
+.snow:nth-child(15) { left: 44%; width: 6px; height: 6px; animation-duration: 7.5s; filter: blur(4px); }
+.snow:nth-child(16) { left: 47%; width: 11px; height: 11px; animation-duration: 5s; filter: blur(1.5px); }
+.snow:nth-child(17) { left: 50%; width: 9px; height: 9px; animation-duration: 8s; filter: blur(2px); }
+.snow:nth-child(18) { left: 53%; width: 5px; height: 5px; animation-duration: 10s; filter: blur(5px); }
+.snow:nth-child(19) { left: 56%; width: 10px; height: 10px; animation-duration: 6s; filter: blur(1px); }
+.snow:nth-child(20) { left: 59%; width: 8px; height: 8px; animation-duration: 9.5s; filter: blur(3px); }
+.snow:nth-child(21) { left: 62%; width: 12px; height: 12px; animation-duration: 7s; filter: blur(1px); }
+.snow:nth-child(22) { left: 65%; width: 7px; height: 7px; animation-duration: 8.5s; filter: blur(2px); }
+.snow:nth-child(23) { left: 68%; width: 9px; height: 9px; animation-duration: 5.5s; filter: blur(3px); }
+.snow:nth-child(24) { left: 71%; width: 6px; height: 6px; animation-duration: 9s; filter: blur(4px); }
+.snow:nth-child(25) { left: 74%; width: 11px; height: 11px; animation-duration: 6.5s; filter: blur(1.5px); }
+.snow:nth-child(26) { left: 77%; width: 8px; height: 8px; animation-duration: 8s; filter: blur(2px); }
+.snow:nth-child(27) { left: 80%; width: 10px; height: 10px; animation-duration: 7.5s; filter: blur(1px); }
+.snow:nth-child(28) { left: 83%; width: 5px; height: 5px; animation-duration: 10s; filter: blur(5px); }
+.snow:nth-child(29) { left: 86%; width: 9px; height: 9px; animation-duration: 9.5s; filter: blur(2px); }
+.snow:nth-child(30) { left: 89%; width: 7px; height: 7px; animation-duration: 6s; filter: blur(3px); }
+/* Остальные 10% экрана (от 89% до 100%) оставим пустыми, чтобы снег не был слишком плотным */

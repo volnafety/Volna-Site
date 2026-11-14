@@ -1,0 +1,59 @@
+// Огонь (Стоит на месте + турбулентность)
+#define SPEED 1.0
+
+float rand(vec2 n)
+{
+    return fract(sin(dot(n, vec2(12.9898, 4.1414))) * 43758.5453);
+}
+
+float noise(vec2 p)
+{
+    vec2 i = floor(p);
+    vec2 f = fract(p);
+    vec2 u = f * f * (3.0 - 2.0 * f);
+    return mix(mix(rand(i + vec2(0.0, 0.0)), rand(i + vec2(1.0, 0.0)), u.x),
+               mix(rand(i + vec2(0.0, 1.0)), rand(i + vec2(1.0, 1.0)), u.x), u.y);
+}
+
+void mainImage(out vec4 fragColor, in vec2 fragCoord)
+{
+    // Нормализация (0..1)
+    vec2 uv = fragCoord / iResolution.xy;
+    
+    // Инвертируем Y (0 внизу, 1 вверху)
+    vec2 p = vec2(uv.x, 1.0 - uv.y);
+    
+    // Центрируем по X
+    p.x = (p.x - 0.5) * 3.0; 
+    
+    // УБРАЛИ АНИМАЦИЮ ПОЛЕТА ВНИЗ (p.y -= iTime)
+    // Теперь огонь стоит на месте, а двигается только шум.
+    
+    // ТУРБУЛЕНТНОСТЬ (колыхание в стороны)
+    float turbulence = noise(p * vec2(3.0, 1.5) + vec2(0.0, iTime * 1.5));
+    p.x += (turbulence - 0.5) * 1.5; 
+    
+    // Создаем шум для языков (он двигается за счет iTime)
+    float n = noise(p * vec2(5.0, 2.0) + vec2(0.0, iTime * 1.0));
+    float n2 = noise(p * vec2(10.0, 4.0) + vec2(0.0, iTime * 2.0));
+    float flame = (n + n2) * 0.5;
+    
+    // Форма (сужается кверху)
+    float shape = (p.y + 0.25) * 1.5; 
+    shape = clamp(shape, 0.0, 1.0);
+    
+    // Края (сужаем огонь по бокам)
+    float edge = 1.0 - abs(p.x * 1.5); 
+    edge = clamp(edge, 0.0, 1.0);
+    
+    float fire = flame * shape * edge;
+    fire = smoothstep(0.2, 0.8, fire);
+
+    // Цвет
+    vec3 color = vec3(1.0, 1.0, 0.8);
+    color = mix(color, vec3(1.0, 0.8, 0.1), smoothstep(0.3, 0.6, fire));
+    color = mix(color, vec3(1.0, 0.2, 0.0), smoothstep(0.6, 0.9, fire));
+    color = mix(color, vec3(0.5, 0.0, 0.0), smoothstep(0.9, 1.0, fire));
+
+    fragColor = vec4(color * fire, 1.0);
+}

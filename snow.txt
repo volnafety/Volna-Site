@@ -1,0 +1,52 @@
+// Снег с ветром и мерцанием
+// Вставляй на shadertoy.com
+
+#define SNOW_AMOUNT 90.0
+#define SNOW_SPEED 0.2
+
+float rand(vec2 co)
+{
+    return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
+}
+
+void mainImage(out vec4 fragColor, in vec2 fragCoord)
+{
+    // Нормализация координат
+    vec2 uv = fragCoord / iResolution.xy;
+    uv.x *= iResolution.x / iResolution.y;
+
+    vec3 snow = vec3(0.0);
+    float t = iTime * SNOW_SPEED;
+
+    for(float i = 0.0; i < SNOW_AMOUNT; i++)
+    {
+        // Случайная позиция
+        float randomX = rand(vec2(i, 1.0));
+        float randomY = rand(vec2(i, 2.0));
+        float randomSize = rand(vec2(i, 3.0)) * 0.02 + 0.005;  // Разный размер
+        float randomSpeed = rand(vec2(i, 5.0)) * 0.5 + 0.5;    // Разная скорость
+        float randomWind = rand(vec2(i, 6.0)) * 0.1 - 0.05;    // Ветер
+
+        // Движение вниз + ветер
+        float y = fract(randomY - t * randomSpeed);
+        float x = randomX + randomWind * sin(t + i) + sin(t * 0.5 + i) * 0.03;
+
+        // Дистанция до снежинки
+        vec2 snowPos = vec2(x, y);
+        float dist = length(uv - snowPos);
+
+        // Мерцание
+        float twinkle = 0.7 + 0.3 * sin(iTime * 3.0 + i);
+
+        // Рисуем снежинку
+        float circle = smoothstep(randomSize, 0.0, dist);
+        snow += vec3(circle) * twinkle;
+    }
+
+    // Цвет неба + сне
+    vec3 sky = vec3(0.0, 0.0, 0.0);
+    fragColor = vec4(sky + snow, 1.0);
+    // Смешиваем небо с туманом (в самом конце)
+    vec3 fogColor = vec3(0.1, 0.15, 0.2);
+    sky = mix(fogColor, sky, uv.y); // Чем выше, тем темнее небо
+}
