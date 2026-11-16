@@ -253,9 +253,26 @@
         color: var(--primary);
       }
 
-      /* Responsive */
       @media (max-width: 768px) {
-        .nav-links { display: none; }
+        /* Убираем скрытие старого меню, если оно есть */
+        /* .nav-links { display: none; } - УДАЛИ ЭТУ СТРОЧКУ */
+    
+        /* Принудительно показываем новую шапку */
+        header, .custom-header {
+          display: flex !important;
+          position: fixed !important;
+          top: 15px !important;
+          left: 15px !important;
+          right: 15px !important;
+          width: auto !important;
+          z-index: 1000 !important;
+        }
+    
+        /* Принудительно показываем кнопку-гамбургер */
+        .menu-btn {
+            display: flex !important;
+        }
+
         .hero h1 { font-size: 2.5rem; }
       }
 
