@@ -16,10 +16,9 @@
       }
 
       body {
-        background-color: var(--bg);
-        color: var(--text);
-        line-height: 1.6;
-        overflow-x: hidden;
+        background: transparent;
+        margin: 0;
+        padding: 0;
       }
 
       /* Navigation */
@@ -72,18 +71,28 @@
       }
 
       .hero {
-         height: 100vh;
-         /* ВОТ ТУТ ВСЁ В ОДНУ СТРОКУ: градиент, затемнение и картинка */
-         background: linear-gradient(to bottom, rgba(18, 18, 23, 0) 60%, rgba(18, 18, 23, 1) 100%), 
-                linear-gradient(rgba(18, 18, 23, 0.8), rgba(18, 18, 23, 0.95)), 
-                url('img/IMG_20261113_185410.jpg') center/cover no-repeat;
+       /* Высота баннера (можно 100vh, можно 80vh, чтобы видеть, что идет скролл) */
+        height: 100vh; 
     
-         display: flex;
-         flex-direction: column;
-         justify-content: center;
-         align-items: center;
-         text-align: center;
-         padding: 0 20px;
+        /* Картинка с затемнением */
+        background: 
+          /* Делаем переход от прозрачного к твоему темно-синему цвету */
+          linear-gradient(to bottom, rgba(10, 28, 58, 0.3) 0%, rgba(10, 28, 58, 0.8) 70%, #0a1c3a 100%),
+          url('img/IMG_20261113_185410.jpg') center/cover no-repeat;
+    
+          /* А прямо под background добавь эту строчку для сочности */
+        filter: saturate(1.3) contrast(1.1) brightness(1.1);
+    
+        /* Выравнивание контента по центру */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 0 20px;
+        
+        /* Убираем отступ сверху, чтобы шапка "прилипла" к картинке */
+        margin-top: 0; 
       }
 
       .hero h1 {
@@ -252,6 +261,7 @@
 
       html {
       scroll-behavior: smooth;
+      background-color: #0a1c3a;
       }
 
       /* ==========================================
@@ -418,3 +428,148 @@
 .snow:nth-child(29) { left: 86%; width: 9px; height: 9px; animation-duration: 9.5s; filter: blur(2px); }
 .snow:nth-child(30) { left: 89%; width: 7px; height: 7px; animation-duration: 6s; filter: blur(3px); }
 /* Остальные 10% экрана (от 89% до 100%) оставим пустыми, чтобы снег не был слишком плотным */
+
+/* --- ШАПКА В СТИЛЕ LIQUID GLASS --- */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px 20px; 
+    padding: 15px 25px;
+    background: rgba(255, 255, 255, 0.001);
+    backdrop-filter: blur(4px) !important; 
+    -webkit-backdrop-filter: blur(8px) !important;
+    border-radius: 20px; 
+    border: 1px solid rgba(255, 255, 255, 0.3); 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    position: sticky;
+    top: 15px;
+    z-index: 100;
+}
+
+/* --- ГРАДИЕНТ ВНИЗУ КАРТИНКИ --- */
+.hero {
+    height: 100vh; 
+    background: 
+        linear-gradient(to bottom, rgba(10, 28, 58, 0.4) 0%, rgba(10, 28, 58, 0.9) 70%, #0a1c3a 100%),
+        url('img/IMG_20261113_185410.jpg') center/cover no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+}
+
+/* --- ЧИНИМ ЦВЕТ ТЕКСТА И ФОН САЙТА --- */
+body {
+    background-color: #0a1c3a;
+    color: white;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+h1, h2, h3, p {
+    color: white; 
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: 900;
+    color: #3b82f6; /* Голубой */
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+
+/* --- КНОПКА ГАМБУРГЕР (Liquid Glass) --- */
+.menu-btn {
+    display: none; /* На ПК скрыта */
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 8px 10px;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 5px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.menu-btn span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: white;
+    border-radius: 2px;
+    box-shadow: 0 0 5px rgba(255,255,255,0.5);
+}
+
+/* --- МЕНЮ НА ПК --- */
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.3s;
+}
+.nav-links a:hover { color: #3b82f6; }
+
+/* --- МОБИЛЬНАЯ ВЕРСИЯ (ТЕЛЕФОНЫ) --- */
+@media (max-width: 768px) {
+    .menu-btn { display: flex; }
+
+    .nav-links {
+        position: fixed;
+        top: 15px; /* Отступ сверху */
+        right: -110%; /* Скрыто справа */
+        width: 260px;
+        height: auto;
+        max-height: 90vh;
+        
+        /* ЖИДКОЕ СТЕКЛО ДЛЯ ВСЕГО МЕНЮ */
+        background: rgba(10, 28, 58, 0.6); 
+        backdrop-filter: blur(25px); 
+        -webkit-backdrop-filter: blur(25px);
+        
+        /* ЗАКРУГЛЕННЫЕ КРАЯ */
+        border-radius: 25px; 
+        border: 1px solid rgba(255, 255, 255, 0.2); 
+        box-shadow: -10px 10px 30px rgba(0, 0, 0, 0.6); 
+        
+        flex-direction: column;
+        padding: 20px;
+        transition: right 0.3s ease;
+        z-index: 105;
+        overflow-y: auto;
+    }
+
+    .nav-links.active {
+        right: 15px; /* Выезжает с отступом от края */
+    }
+    
+    .nav-links a {
+        font-size: 18px;
+        padding: 12px 15px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        
+        /* ЗАКРУГЛЕННЫЕ КРАЯ У ССЫЛОК */
+        border-radius: 15px; 
+        margin-bottom: 8px;
+        transition: 0.3s;
+    }
+    
+    .nav-links a:last-child { border-bottom: none; }
+    .nav-links a:active { background: rgba(255,255,255,0.15); }
+}
+
+/* --- ПРИНУДИТЕЛЬНЫЙ ГРАДИЕНТ --- */
+.hero {
+    background-image: 
+        linear-gradient(to bottom, rgba(10, 28, 58, 0.2) 0%, rgba(10, 28, 58, 0.8) 70%, #0a1c3a 100%),
+        url('img/IMG_20261113_185410.jpg') !important;
+    background-size: cover !important;
+    background-position: center !important;
+}

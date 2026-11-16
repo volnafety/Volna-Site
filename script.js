@@ -5,14 +5,22 @@
         span.textContent = item.classList.contains('active') ? '−' : '+';
       }
 
-      // Плавная прокрутка
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-          e.preventDefault();
-          document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
+     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+          anchor.addEventListener('click', function (e) {
+              const targetId = this.getAttribute('href');
+        
+              // Если ссылка просто "#", ничего не делаем
+              if (targetId === '#') return; 
+
+              const targetElement = document.querySelector(targetId);
+        
+              if (targetElement) {
+                  e.preventDefault();
+                  targetElement.scrollIntoView({
+                      behavior: 'smooth'
+                  });
+              }
           });
-        });
       });
 
       // ==========================================
